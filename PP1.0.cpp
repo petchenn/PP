@@ -6,8 +6,8 @@
 
 using namespace std;
 
-const size_t gCount1 = 100;
-const size_t gCount2 = 10000;
+const size_t gCount1 = 200;
+const size_t gCount2 = 100000;
 
 
 
@@ -52,54 +52,61 @@ void init_array(int* arr, size_t gCount) {
 }
 
 int main() {
-    cout << "100 elem" << endl;
+    cout << gCount1 << " elem" << endl;
     int arr[gCount1];
     srand(static_cast<unsigned>(GetTickCount64()));
     double s = 0.0;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         init_array(arr, gCount1);
         clock_t time;
         time = clock();
         quickSort(arr, 0, gCount1 - 1);
         time = clock() - time;
         s += time;
+        cout << static_cast<float>(time) / CLOCKS_PER_SEC << " ";
     };
-    cout << "QuickSort: " << s / 20000 << endl;
+    cout << '\n';
+    cout << "QuickSort: " << s / gCount1 / CLOCKS_PER_SEC << endl;
     s = 0.0;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         init_array(arr, gCount1);
         clock_t time;
         time = clock();
         quick_sort_async(arr, 0, gCount1 - 1);
         time = clock() - time;
         s += time;
-        //cout << static_cast<float>(time) / CLOCKS_PER_SEC << " ";
+        cout << static_cast<float>(time) / CLOCKS_PER_SEC << " ";
     }
+    cout << '\n';
+    cout <<"QuickSort Async: " << s / gCount1 / CLOCKS_PER_SEC << endl;
 
-    cout <<"QuickSort Async: " << s / 20000 << endl;
-
-    cout << endl << "2000 elem" << endl;
+    cout << endl << gCount2 << " elem" << endl;
     int arr2[gCount2];
 
     s = 0.0;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         init_array(arr2, gCount2);
         clock_t time;
         time = clock();
         quickSort(arr2, 0, gCount2 - 1);
         time = clock() - time;
         s += time;
+        cout << static_cast<float>(time) / CLOCKS_PER_SEC << " ";
     };
-    cout << "QuickSort: " << s / 20000 << endl;
+    cout << '\n';
+    cout << "QuickSort: " << s / gCount2 / CLOCKS_PER_SEC << endl;
     s = 0.0;
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 50; i++) {
         init_array(arr2, gCount2);
         clock_t time;
         time = clock();
         quick_sort_async(arr2, 0, gCount2 - 1);
         time = clock() - time;
         s += time;
+        cout << static_cast<float>(time) / CLOCKS_PER_SEC << " ";
     }
-    cout << "QuickSort Async: " << s / 20000 << endl;
+    cout << '\n';
+    cout << "QuickSort Async: " << s / gCount2 / CLOCKS_PER_SEC << endl;
     return 0;
 }
+
