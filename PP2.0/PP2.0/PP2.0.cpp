@@ -7,12 +7,12 @@
 #include <thread>
 
 void printTest() {
-    std::cout << "test \n";
+    printf( "test \n");
     std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
 void printHello() {
-    std::cout << "hello\n";
+    printf( "hello\n");
     std::this_thread::sleep_for(std::chrono::seconds(5));
 }
 
@@ -25,8 +25,8 @@ int main()
     tr.putFunc(func);
 }
 
-// ïåðåäà÷à â êëàññ óêàçàòåëÿ íà ôóíêöèþ, î÷åðåäü ïîòîêîâ, åñëè äðóãèå çàíÿòû.
-// ñèíõðîíèçàöèÿ ïîòîêîâ ÷åðåç mutex 
+// Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã·Ã  Ã¢ ÃªÃ«Ã Ã±Ã± Ã³ÃªÃ Ã§Ã Ã²Ã¥Ã«Ã¿ Ã­Ã  Ã´Ã³Ã­ÃªÃ¶Ã¨Ã¾, Ã®Ã·Ã¥Ã°Ã¥Ã¤Ã¼ Ã¯Ã®Ã²Ã®ÃªÃ®Ã¢, Ã¥Ã±Ã«Ã¨ Ã¤Ã°Ã³Ã£Ã¨Ã¥ Ã§Ã Ã­Ã¿Ã²Ã».
+// Ã±Ã¨Ã­ÃµÃ°Ã®Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿ Ã¯Ã®Ã²Ã®ÃªÃ®Ã¢ Ã·Ã¥Ã°Ã¥Ã§ mutex 
 // Debug program: F5 or Debug > Start Debugging menu
 
 // Tips for Getting Started: 
