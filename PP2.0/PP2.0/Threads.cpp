@@ -21,7 +21,8 @@ void Threads::work(int j) {
 		std::function<void()> curop;
 	{
 		std::lock_guard<std::mutex> guard(m);
-		std::cout << j << "worked ";
+		printf(" %d worked. ", j);
+		//std::cout << j << "worked ";
 		if (operations.empty()) { continue; }
 
 		curop = operations.front(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
