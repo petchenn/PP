@@ -18,19 +18,21 @@ Threads::~Threads() {
 
 void Threads::work(int j) {
 	while (true) {
-		
+		std::function<void()> curop;
+	{
 		std::lock_guard<std::mutex> guard(m);
 		std::cout << j << "worked ";
-		if (!operations.empty()) {
-			std::function<void()> curop;
-			
-			curop = operations.front(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			operations.pop();
-			curop();
-		}
+		if (operations.empty()) { continue; }
+
+		curop = operations.front(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		operations.pop();
+	}
+		curop();
+		
 	}
 }
 
 void Threads::putFunc(std::function<void()> op) {
+	std::lock_guard<std::mutex> guard(m);
 	operations.push(op);
 }
