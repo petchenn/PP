@@ -14,16 +14,15 @@ public:
 
 	Threads();
 	~Threads();
-	void putFunc(std::function<void()>);
+	void putFunc(std::function<void(unsigned int)>);
 
 private:
 	mutable std::mutex m;
 	int count;
 	std::vector<std::thread> threads;
-	//std::thread t;
-	//int workcount;
 	void work( int j);
-	std::queue<std::function<void()>> operations;
-	//std::function<void()> curop;
+	std::queue<std::function<void(unsigned int)>> operations;
+	bool workThreads = true;
+	unsigned int getThreadID();
 };
 
