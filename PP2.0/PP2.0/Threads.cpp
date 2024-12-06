@@ -2,38 +2,44 @@
 
 Threads::Threads() {
 	count = std::thread::hardware_concurrency();
-	//workcount = 0;
+	workThreads = true;
 	for (int i = 0; i < count; i++) {
-		std::thread t(&Threads::work, this, i);
+		std::thread t(&Threads::work, this, i+50);
 		threads.push_back( std::move(t));
 	}
-	std::cout << threads.size() << ' ' << count;
 }
 
 Threads::~Threads() {
+	workThreads = false;
 	for (int i = 0; i < count; i++) {
-		threads[i].join();
+		if(threads[i].joinable())
+			threads[i].join();
 	}
 }
 
 void Threads::work(int j) {
-	while (true) {
+	while (workThreads) {
 		std::function<void()> curop;
-	{
-		std::lock_guard<std::mutex> guard(m);
-		printf(" %d worked. ", j);
-		//std::cout << j << "worked ";
-		if (operations.empty()) { continue; }
+		{
+			std::lock_guard<std::mutex> guard(m);
 
-		curop = operations.front(); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		operations.pop();
-	}
+			//printf("%d  ", getThreadID());
+			if (operations.empty()) { continue; }
+
+			curop = std::bind(operations.front(), getThreadID()); 
+			operations.pop();
+		}
 		curop();
-		
 	}
 }
 
-void Threads::putFunc(std::function<void()> op) {
+void Threads::putFunc(std::function<void(unsigned int)> op) {
 	std::lock_guard<std::mutex> guard(m);
 	operations.push(op);
+}
+
+unsigned int Threads::getThreadID() {
+	std::thread::id threadID = std::this_thread::get_id();
+	unsigned int v = *static_cast<unsigned int*>(static_cast<void*>(&threadID));
+	return v;
 }
