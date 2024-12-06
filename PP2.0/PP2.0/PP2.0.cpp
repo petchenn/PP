@@ -6,6 +6,30 @@
 #include <chrono>
 #include <thread>
 
+int k;
+std::mutex m;
+
+void BigAndHeavyOperation(unsigned int n) {
+    auto start = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::milliseconds(5000); // 5 секунд
+
+    double result = 0.0;
+    for (long long i = 0; i < 1e9; ++i) {
+        result += sqrt(i);
+
+        // Проверяем, прошло ли 5 секунд
+        if (std::chrono::high_resolution_clock::now() - start > duration) {
+            break;
+        }
+    }
+
+  
+    k++;
+
+    printf("result : %f \n", result);
+  
+}
+
 void printTest() {
     printf( "test \n");
     std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -16,23 +40,16 @@ void printHello() {
     std::this_thread::sleep_for(std::chrono::seconds(5));
 }
 
+
 int main()
 {
     Threads tr;
-    std::function<void()> func = printTest;
-    tr.putFunc(func);
-    func = printHello;
-    tr.putFunc(func);
+    std::function<void(unsigned int)> f = BigAndHeavyOperation;
+    tr.putFunc(f);
+    tr.putFunc(f);
+    tr.putFunc(f);
+    while (k < 3) {
+        
+    }
 }
 
-// ïåðåäà÷à â êëàññ óêàçàòåëÿ íà ôóíêöèþ, î÷åðåäü ïîòîêîâ, åñëè äðóãèå çàíÿòû.
-// ñèíõðîíèçàöèÿ ïîòîêîâ ÷åðåç mutex 
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
