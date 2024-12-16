@@ -1,53 +1,56 @@
+// PP2.0.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
 #include "Threads.h"
+#include <chrono>
+#include <thread>
 
-Threads::Threads() {
-	count = std::thread::hardware_concurrency();
-	//workThreads = true;
-	for (int i = 0; i < count; i++) {
-		std::thread t(&Threads::work, this, i+50);
-		threads.push_back( std::move(t));
-	}
+int k = 0;
+std::mutex m;
+//std::condition_variable_any cond_stop;
+
+void heavyComputation(unsigned int n) {
+    auto start = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::milliseconds(5000); // 5 секунд
+    double result = 0.0;
+
+    for (long long i = 0; i < 1e9; ++i) {
+        result += sqrt(i);
+    
+    // Проверяем, прошло ли 5 секунд
+    if (std::chrono::high_resolution_clock::now() - start > duration) {
+        break;
+    }
+    }
+    {
+        std::lock_guard<std::mutex> guard(m);
+        k++;
+    }
+    printf("result : %f, %f \n", result, (float)k);
+  
 }
 
-Threads::~Threads() {
-	workThreads = true;
-	cond_stop.notify_all();
-
-	for (int i = 0; i < count; i++) {
-		if(threads[i].joinable())
-			threads[i].join();
-	}
+void printTest() {
+    printf( "test \n");
+    std::this_thread::sleep_for(std::chrono::seconds(10));
 }
 
-void Threads::work(int j) {
-	while (true) {
-		std::unique_lock<std::mutex> lk(m);
-		cond_stop.wait(lk, [this]() {return !operations.empty() || workThreads; });
-		std::function<void()> curop;
-
-		//printf("%d  ", getThreadID());
-		if (!operations.empty()) {
-
-			curop = std::bind(operations.front(), getThreadID());
-			operations.pop();
-			lk.unlock();
-		}
-		if (workThreads) break;
-		curop();
-	}
+void printHello() {
+    printf( "hello\n");
+    std::this_thread::sleep_for(std::chrono::seconds(5));
 }
 
-void Threads::putFunc(std::function<void(unsigned int)> op) {
-	{
-		std::lock_guard<std::mutex> guard(m);
-		operations.push(op);
-	}
-	cond_stop.notify_one();
+
+int main()
+{
+    Threads tr;
+    std::function<void(unsigned int)> f = heavyComputation;
+    tr.putFunc(f);
+    tr.putFunc(f);
+    tr.putFunc(f);
+    while (k < 3) {
+        
+    }
 }
 
-unsigned int Threads::getThreadID() {
-	std::thread::id threadID = std::this_thread::get_id();
-	unsigned int v = *static_cast<unsigned int*>(static_cast<void*>(&threadID));
-	return v;
-
-}
