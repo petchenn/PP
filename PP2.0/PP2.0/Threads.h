@@ -24,5 +24,6 @@ private:
 	std::queue<std::function<void(unsigned int)>> operations;
 	bool workThreads = true;
 	unsigned int getThreadID();
+	std::condition_variable_any cond_stop;
 };
 
