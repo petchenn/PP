@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -g
+CFLAGS = -Wall -c
 EXECUTABLE = f
 INSTALL_DIR = ~/lab 
 
