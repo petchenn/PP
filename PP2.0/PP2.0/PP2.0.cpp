@@ -27,7 +27,7 @@ void heavyComputation(unsigned int n) {
         std::lock_guard<std::mutex> guard(m);
         k++;
     }
-    printf("result : %f, %f \n", result, (float)k);
+    printf("result : %f, %d th iteration.\n", result, k);
   
 }
 
@@ -46,6 +46,8 @@ int main()
 {
     Threads tr;
     std::function<void(unsigned int)> f = heavyComputation;
+    printf("creating a thread pool with %d threads\n", tr.getThreadCount());
+    printf("The sums of the square roots are calculated...\n");
     tr.putFunc(f);
     tr.putFunc(f);
     tr.putFunc(f);
