@@ -15,6 +15,7 @@ public:
 	Threads();
 	~Threads();
 	void putFunc(std::function<void(unsigned int)>);
+	int getThreadCount();
 
 private:
 	mutable std::mutex m;
@@ -22,7 +23,7 @@ private:
 	std::vector<std::thread> threads;
 	void work( int j);
 	std::queue<std::function<void(unsigned int)>> operations;
-	bool workThreads = true;
+	bool workThreads = false;
 	unsigned int getThreadID();
 	std::condition_variable_any cond_stop;
 };
