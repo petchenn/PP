@@ -49,8 +49,8 @@ unsigned int Threads::getThreadID() {
 	std::thread::id threadID = std::this_thread::get_id();
 	unsigned int v = *static_cast<unsigned int*>(static_cast<void*>(&threadID));
 	return v;
-	//std::hash<std::thread::id> hasher;
-	//size_t threadIdHash = hasher(threadID);
-	//int threadInt = static_cast<int> (threadIdHash);
-	//return threadInt;
+}
+
+int Threads::getThreadCount() {
+	return count;
 }
